@@ -33,15 +33,15 @@ payroll_monthly<-as.data.frame(payroll_monthly)
 weekly_long<-payroll_weekly %>%
   rownames_to_column(var="Date") %>%
   gather(Dept,Hrs,2:6) %>%
-  mutate(d_Est= Hrs*(1+rnorm(length(Hrs),0,0.4)))%>%
+  mutate(d_Est= Hrs*(1+rnorm(length(Hrs),0,1)))%>%
   mutate(Var=Hrs-d_Est) %>%
   mutate(Date=as.Date(Date,format="%Y-%m-%d"))
 monthly_long<-payroll_monthly %>%
   rownames_to_column(var="Date") %>%
   gather(Dept,Hrs,2:6) %>%
-  mutate(d_Est= Hrs*(1+rnorm(length(Hrs),0,0.4)))%>%
+  mutate(d_Est= Hrs*(1+rnorm(length(Hrs),0,1)))%>%
   mutate(Var=Hrs-d_Est) %>%
   mutate(Date=as.Date(Date,format="%Y-%m-%d"))
 #export files
-saveRDS(weekly_long,file="./data/project_hrs_weekly_long.rds")
-saveRDS(monthly_long,file="./data/project_hrs_monthly_long.rds")
+saveRDS(weekly_long,file="./ProjectHrsEstvAct/data/project_hrs_weekly_long.rds")
+saveRDS(monthly_long,file="./ProjectHrsEstvAct/data/project_hrs_monthly_long.rds")
