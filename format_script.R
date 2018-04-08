@@ -1,7 +1,8 @@
 library(xts)
 library(tidyverse)
 #import
-#Note file path saved separately
+#Note file wd and file path saved separately
+setwd(wd)
 payroll_p1<-read.csv(path,header=TRUE)
 #formatting
 payroll_p1$Date<-as.Date(payroll_p1$Date,format="%d/%m/%Y")
@@ -14,7 +15,7 @@ payroll_sum<-payroll_p1 %>%
   group_by(Date,Department) %>%
   summarize(TotalHrs=sum(Hours)) %>%
   spread(Department,TotalHrs)
-#create vars from dept
+#reformatting some column names
 names(payroll_sum)[2]<-"dotNet"
 names(payroll_sum)[4]<-"FrontEnd"
 #replace NAs with 0
@@ -39,6 +40,6 @@ monthly_long<-payroll_monthly %>%
   gather(Dept,Hrs,2:6) %>%
   mutate(d_Est= Hrs*(1+rnorm(length(Hrs),0,0.4)))%>%
   mutate(Var=Hrs-d_Est)
-
-#viz
-
+#export files
+saveRDS(weekly_long,file="./data/project_hrs_weekly_long.rds")
+saveRDS(monthly_long,file="./data/project_hrs_monthly_long.rds")
