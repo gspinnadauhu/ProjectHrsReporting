@@ -1,5 +1,6 @@
 library(xts)
 library(tidyverse)
+library(truncnorm)
 #import
 #Note file wd and file path saved separately
 setwd(wd)
@@ -33,13 +34,13 @@ payroll_monthly<-as.data.frame(payroll_monthly)
 weekly_long<-payroll_weekly %>%
   rownames_to_column(var="Date") %>%
   gather(Dept,Hrs,2:6) %>%
-  mutate(d_Est=round(abs(rnorm(length(Hrs),mean(Hrs),sd(Hrs[!(Hrs=0)]))),1))%>%
+  mutate(d_Est=round(rtruncnorm(length(Hrs),a=0,b=max(Hrs)+50,mean(Hrs),sd(Hrs)),1))%>%
   mutate(Var=Hrs-d_Est) %>%
   mutate(Date=as.Date(Date,format="%Y-%m-%d"))
 monthly_long<-payroll_monthly %>%
   rownames_to_column(var="Date") %>%
   gather(Dept,Hrs,2:6) %>%
-  mutate(d_Est=round(abs(rnorm(length(Hrs),mean(Hrs),sd(Hrs[!(Hrs=0)]))),1))%>%
+  mutate(d_Est=round(rtruncnorm(length(Hrs),a=0,b=max(Hrs)+50,mean(Hrs),sd(Hrs)),1))%>%
   mutate(Var=Hrs-d_Est) %>%
   mutate(Date=as.Date(Date,format="%Y-%m-%d"))
 #export files
