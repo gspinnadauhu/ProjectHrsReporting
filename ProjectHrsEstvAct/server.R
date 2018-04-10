@@ -5,26 +5,26 @@ library(tidyverse)
 weekly<-readRDS("./data/project_hrs_weekly_long.rds")
 # Define server logic required to draw radar plot from slider input
 shinyServer(
-  #select daterange to display based on radiobutton input
+  #select up-to week based on slider input
   function(input, output) {
     selection<-reactive({
       weekly %>%
         filter(Date<=input$DateInput) %>%
         group_by(Dept)%>%
-        summarize(TotalHrs=sum(Hrs),
-                  TotalEst=sum(d_Est))
+        summarize(Total_Hrs=sum(Hrs),
+                  Total_Est=sum(d_Est))
     })
     TotalHrs<-reactive({
-      selection$TotalHrs
+      selection()$Total_Hrs
     })
     TotalEst<-reactive({
-      selection$TotalEst
+      selection()$Total_Est
     })
-    Dept<-reactive({
-      selection$Dept
+    Deptmt<-reactive({
+      selection()$Dept
     })
     MaxHrs<-reactive({
-      max(TotalHrs,TotalEst)+10
+      max(TotalHrs(),TotalEst())+10
     })
     output$radarplot<-renderPlotly({
       plot_ly(
@@ -33,13 +33,13 @@ shinyServer(
         mode='lines'
         ) %>%
       add_trace(
-        r=TotalEst,
-        theta=Dept,
+        r=TotalEst(),
+        theta=Deptmt(),
         name="Estimated Hours"
         ) %>%
       add_trace(
-        r=TotalHrs,
-        theta=Dept,
+        r=TotalHrs(),
+        theta=Deptmt(),
         name="Actual Hours"
         ) %>%
       layout(
