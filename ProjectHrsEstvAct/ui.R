@@ -17,8 +17,8 @@ shinyUI(
                     value = min(weekdates),
                     timeFormat = "%F",
                     step=7
-                    ),
-        submitButton("Apply Selection")
+                    )#,
+        #submitButton("Apply Selection")
         ),
     # Show a radar plot of cumulative estimated vs actual hrs
     mainPanel(
